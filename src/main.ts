@@ -1,5 +1,5 @@
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
-import { App, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { App, CfnOutput, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -35,7 +35,9 @@ export class SlackAppTest extends Stack {
       role: role,
       timeout: Duration.seconds(10)
     });
-    lambda.addFunctionUrl({authType: FunctionUrlAuthType.NONE});
+    const fnUrl = lambda.addFunctionUrl({authType: FunctionUrlAuthType.NONE});
+
+    new CfnOutput(this, `${prefix}-functionUrl`, {value: fnUrl.url})
   }
 }
 
