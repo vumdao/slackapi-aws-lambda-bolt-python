@@ -122,7 +122,11 @@
   - Processes belong to slack bolt-python: The important one is verifying signing request to clarify the request is sent from Slack app, it is implemented as a middleware, enabled by default when you instantiate the app (see attribute [request_verification_enabled](https://github.com/slackapi/bolt-python/blob/4e0709f0578080833f9aeab984a778be81a30178/slack_bolt/middleware/request_verification/request_verification.py)).
   - Process event: Handle main operations
 
-- We use [`slack_bolt.lazy_listener`](https://slack.dev/bolt-python/api-docs/slack_bolt/lazy_listener/index.html) module in the handler - Lazy listener runner is a beta feature for the apps running on Function-as-a-Service platforms.
+## 🚀 **Lazy listeners (FaaS)** <a name="Lazy-listeners-(FaaS)"></a>
+- In the lambda handler, you see the `lazy` function, what is it?
+- [Lazy Listeners](https://slack.dev/bolt-python/concepts#lazy-listeners) are a feature (at the time of this post, python support only) which make it easier to deploy Slack apps to FaaS (Function-as-a-Service) environments.
+- Calling `ack()` is responsible for returning an immediate HTTP response to Slack API servers within 3 seconds. By contrast, lazy functions are not supposed to return any response. They can do anything by leveraging all the listener args apart from `ack()` utility. Also, they are completely free from 3-second timeouts.
+- As the lazy is a list, you can set multiple lazy functions to a single listener. **The lazy functions will be executed in parallel.**
 
 ## 🚀 **Test the Slash command** <a name="Test-the-Slash-command"></a>
 - Create slash command with `Command` name is the exact `command` we set in the lambda handler, get the output of lambda function URL after running `cdk deploy` and add to `Request URL`
@@ -132,6 +136,15 @@
 - Once installed to a Slack workspace, try typing `/hello-bolt-python-lambda hello` in any channel
 
   <img src=images/test.png width=700>
+
+## 🚀 **Test the app at-mention** <a name="Test-the-Slash-command"></a>
+- We need to subscribe to the `app_mention` bot event (Your Apps > Event Subscriptions > Subscribe to bot events) and provide lambda function url at Request URL
+
+  <img src=images/event-sub.png width=700>
+
+- With this event subscribed to, you can check if things are working by sending a message such as "hello @yourbotname" to a channel that your bot is a member of (sending this message will give you the option to add your bot to the channel too). If everything is working, you should get a response in channel from your bot! Hope this helps!
+
+  <img src=images/mention.png width=700>
 
 ## 🚀 **Conclusion** <a name="Conclusion"></a>
 - With lambda function url, we don't need to host slackbot in an instance/server, all is serverless. And with AWS CDK, all is managed through code and deploy by cdk-pipeline
