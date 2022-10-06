@@ -8,8 +8,8 @@
 </h1>
 
 ## Abstract
-- The story: Since the retirement of `rtm.start` and Slack recommend to not use the custom integration any more, so we need to move to new slack apps
-- With new Slack App feature and [The Bolt family of SDKs](https://api.slack.com/tools/bolt), we can implement Slack bot with AWS serverless using Slash command.
+- The story: Since the retirement of `rtm.start` and Slack recommends to not use the custom integration any more, so we need to move to new slack apps
+- With new Slack App feature and [The Bolt family of SDKs](https://api.slack.com/tools/bolt), we can implement Slack bot with AWS serverless using Slash command or at-mention.
 - This post will follow and extend the example from [slackapi/bolt-python](https://github.com/slackapi/bolt-python) and manage infrasture as code it using AWS CDK typescript.
 
 ## Table Of Contents
